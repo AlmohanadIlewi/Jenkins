@@ -1,0 +1,43 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                // Git Checkout
+                git 'https://github.com/dein-benutzername/dein-repo.git'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                // Dein Build-Skript hier
+                sh 'npm install' // Beispiel für ein Node.js-Projekt
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                // Dein Deploy-Skript hier
+                sh 'npm run deploy' // Beispiel für ein Node.js-Projekt
+            }
+        }
+    }
+
+    post {
+        success {
+            // Erfolgreiche Build-Aktionen hier
+            echo 'Der Build war erfolgreich!'
+        }
+
+        failure {
+            // Aktionen im Falle eines Build-Fehlers hier
+            echo 'Der Build ist fehlgeschlagen!'
+        }
+    }
+
+    // GitHub-Webhook für Push-Events konfigurieren
+    triggers {
+        githubPush()
+    }
+}
